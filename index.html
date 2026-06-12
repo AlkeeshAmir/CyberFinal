@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>חידון | מבוא להגנת סייבר ואבטחת מידע</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Noto+Sans+Hebrew:wght@400;500;600&amp;display=swap');
+        body { font-family: 'Noto Sans Hebrew', 'Inter', system-ui, sans-serif; }
+        .question-card { background: #0f172a; border: 1px solid #334155; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); }
+        .option-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }
+        .option-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.2); border-color: #64748b; }
+        .option-btn:active:not(:disabled) { transform: scale(0.985); }
+        .option-btn.correct { background-color: #166534 !important; border-color: #4ade80 !important; color: white; }
+        .option-btn.incorrect { background-color: #991b1b !important; border-color: #f87171 !important; color: white; }
+        .nav-btn { transition: all 0.2s ease; }
+        .progress-bar { transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s ease; }
+        .quiz-container { max-width: 720px; margin: 0 auto; }
+        .section-header { font-size: 0.75rem; letter-spacing: 0.5px; text-transform: uppercase; font-weight: 600; }
+        .answer-letter { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-weight: 700; }
+        .mobile-friendly { -webkit-tap-highlight-color: transparent; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200 mobile-friendly">
+    <div class="quiz-container min-h-screen px-4 py-6 flex flex-col">
+        <div class="flex items-center justify-between mb-6 px-1">
+            <div class="flex items-center gap-x-3">
+                <div class="w-11 h-11 bg-gradient-to-br from-cyan-500 to-teal-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <i class="fa-solid fa-shield-halved text-white text-3xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-extrabold tracking-tighter">חידון סייבר</h1>
+                    <p class="text-[10px] text-slate-500 -mt-0.5">מבוא להגנת סייבר ואבטחת מידע</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <div class="inline-flex items-center gap-x-1.5 bg-slate-900 border border-slate-700 rounded-2xl px-3 py-1">
+                    <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                    <span class="text-xs font-semibold text-emerald-400">120+ שאלות</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="start-screen" class="flex-1 flex flex-col items-center justify-center text-center">
+            <div class="max-w-md w-full">
+                <div class="mb-8">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-slate-900 border border-slate-700 rounded-3xl mb-6">
+                        <i class="fa-solid fa-user-shield text-5xl text-cyan-400"></i>
+                    </div>
+                    <h2 class="text-4xl font-extrabold tracking-tighter mb-3">בדוק את הידע שלך</h2>
+                    <p class="text-xl text-slate-400 leading-tight">חידון אינטראקטיבי מקיף<br>המבוסס על סיכום הקורס המלא</p>
+                </div>
+                <div class="bg-slate-900 border border-slate-700 rounded-3xl p-5 mb-6 text-sm">
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div><div class="text-2xl font-bold text-emerald-400">120+</div><div class="text-xs text-slate-500 mt-0.5">שאלות</div></div>
+                        <div><div class="text-2xl font-bold text-cyan-400">12</div><div class="text-xs text-slate-500 mt-0.5">נושאים</div></div>
+                        <div><div class="text-2xl font-bold text-amber-400">100%</div><div class="text-xs text-slate-500 mt-0.5">כיסוי</div></div>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <button onclick="startQuiz(false)" class="w-full group flex items-center justify-center gap-x-3 bg-white hover:bg-slate-100 active:bg-slate-200 transition-all text-slate-900 font-extrabold py-4 px-8 rounded-3xl text-lg shadow-xl">
+                        <span>התחל חידון מלא</span>
+                        <i class="fa-solid fa-play ml-1 group-active:scale-90 transition-transform"></i>
+                    </button>
+                    <button onclick="startQuiz(true)" class="w-full flex items-center justify-center gap-x-2 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 transition-colors border border-slate-600 font-semibold py-3.5 px-6 rounded-3xl text-base">
+                        <i class="fa-solid fa-random"></i>
+                        <span>גרסה אקראית (50 שאלות)</span>
+                    </button>
+                </div>
+                <p class="mt-6 text-[10px] text-slate-500">מותאם לטלפון נייד • ניתן לחזור על שאלות • משוב מיידי</p>
+            </div>
+        </div>
+
+        <div id="quiz-screen" class="hidden flex-1 flex flex-col">
+            <div class="flex items-center justify-between mb-4 px-1">
+                <div>
+                    <span class="section-header text-cyan-400">שאלה</span>
+                    <span id="q-number-top" class="font-mono text-2xl font-bold tabular-nums ml-1.5">01</span>
+                    <span class="text-slate-500">/ <span id="total-q-top">120</span></span>
+                </div>
+                <div class="flex items-center gap-x-2 bg-slate-900 border border-slate-700 rounded-2xl px-4 py-1">
+                    <i class="fa-solid fa-tachometer-alt text-emerald-400"></i>
+                    <span id="score-top" class="font-mono font-semibold tabular-nums">0/120</span>
+                </div>
+            </div>
+            <div class="mb-5 px-1">
+                <div class="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="h-full bg-gradient-to-r from-cyan-400 via-teal-400 to-emerald-400 progress-bar" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="question-card flex-1 rounded-3xl p-6 mb-5 border border-slate-700">
+                <div class="flex gap-4">
+                    <div id="q-badge" class="shrink-0 w-9 h-9 rounded-2xl bg-slate-800 border border-slate-600 flex items-center justify-center text-sm font-extrabold text-cyan-400 tabular-nums">01</div>
+                    <div class="flex-1 pt-1">
+                        <div id="question-text" class="text-[17px] leading-snug font-semibold text-white tracking-[-0.2px]"></div>
+                    </div>
+                </div>
+                <div id="options-container" class="mt-7 space-y-2.5"></div>
+            </div>
+            <div id="feedback-area" class="hidden mb-4 px-1">
+                <div id="feedback-box" class="rounded-2xl px-5 py-3.5 text-sm border flex items-start gap-3">
+                    <i id="feedback-icon" class="fa-solid text-lg mt-0.5"></i>
+                    <div id="feedback-text" class="flex-1 leading-snug"></div>
+                </div>
+            </div>
+            <div class="flex gap-3 px-1">
+                <button onclick="prevQuestion()" id="prev-btn" class="nav-btn flex-1 flex items-center justify-center gap-x-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 disabled:opacity-40 disabled:cursor-not-allowed py-[13px] rounded-2xl font-semibold text-sm active:scale-[0.985]">
+                    <i class="fa-solid fa-arrow-right"></i><span>הקודם</span>
+                </button>
+                <button onclick="nextQuestion()" id="next-btn" class="nav-btn flex-1 flex items-center justify-center gap-x-2 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 font-extrabold py-[13px] rounded-2xl text-sm active:scale-[0.985]">
+                    <span id="next-btn-text">הבא</span>
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="end-screen" class="hidden flex-1 flex flex-col items-center justify-center text-center px-4">
+            <div class="w-28 h-28 bg-gradient-to-br from-emerald-500 to-cyan-600 rounded-full flex items-center justify-center mb-7 shadow-2xl">
+                <i class="fa-solid fa-trophy text-white text-6xl"></i>
+            </div>
+            <h2 class="text-3xl font-extrabold tracking-tight mb-1">סיימת את החידון!</h2>
+            <div id="final-percentage" class="text-[72px] font-extrabold tabular-nums tracking-tighter bg-gradient-to-br from-emerald-400 to-cyan-400 bg-clip-text text-transparent leading-none my-2">87%</div>
+            <div class="text-xl text-slate-300 mb-6">קיבלת <span id="final-score" class="font-extrabold text-white">104</span> מתוך <span id="final-total" class="font-extrabold text-white">120</span></div>
+            <div id="performance-badge" class="inline-flex items-center gap-x-2 bg-slate-900 border border-slate-700 rounded-3xl px-5 py-2 mb-8">
+                <span id="performance-text" class="font-semibold text-sm"></span>
+            </div>
+            <div class="w-full max-w-xs space-y-3">
+                <button onclick="restartQuiz()" class="w-full flex items-center justify-center gap-x-2 bg-white text-slate-900 font-extrabold py-3.5 rounded-3xl active:bg-slate-100 transition-colors">
+                    <i class="fa-solid fa-redo"></i><span>נסה שוב</span>
+                </button>
+                <button onclick="reviewWrongAnswers()" class="w-full flex items-center justify-center gap-x-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 font-semibold py-3.5 rounded-3xl transition-colors">
+                    <i class="fa-solid fa-list-check"></i><span>סקור תשובות שגויות</span>
+                </button>
+                <button onclick="goToStart()" class="text-xs text-slate-400 hover:text-slate-300 py-2 flex items-center justify-center gap-x-1.5">
+                    <i class="fa-solid fa-home"></i><span>חזור למסך הפתיחה</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function initTailwind() { document.documentElement.style.setProperty('--accent', '#22d3ee'); }
+        const allQuestions = [
+            {
+                        "question": "מהו CNI (Computer Network Influence)?",
+                        "options": [
+                                    "ניצול חשאי של רשתות לצורך איסוף מודיעין מתמשך",
+                                    "תקיפת רשתות מחשבים במטרה לשבש מערכות קריטיות",
+                                    "הגנה על תשתיות קריטיות מפני תקיפות סייבר מתקדמות",
+                                    "שינוי תודעה ע\"י פרסומים כוזבים במדיה החברתית"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מהי המטרה העיקרית של CNA (Computer Network Attack)?",
+                        "options": [
+                                    "להתקין דלתות אחוריות לצורך מעקב מתמשך על המערכת",
+                                    "לשנות את דעת הקהל באמצעות הפצת מידע כוזב ברשתות",
+                                    "לאסוף מידע רגיש בצורה חשאית ומתמשכת לאורך זמן",
+                                    "לשבש, להשבית או להרוס מערכות מחשוב ומידע בארגון"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "במה שונה CNE מ-CNA?",
+                        "options": [
+                                    "CNA פועלת בצורה חשאית ואילו CNE גורמת נזק גלוי ומיידי",
+                                    "CNE מתמקדת בעיקר בתקיפות חומרה פיזיות בלבד",
+                                    "אין הבדל מהותי בין שתי שיטות התקיפה הללו באופן כללי",
+                                    "CNE שואפת להישאר בלתי מורגשת כדי לשאוב מידע לאורך זמן"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "איזו פעולה היא דוגמה ל-CNA?",
+                        "options": [
+                                    "נעילת מערכות באמצעות כופרה והשבתת תשתיות מים וחשמל",
+                                    "סריקת רשתות חברתיות לאיתור עובדים בכירים בארגון",
+                                    "התקנת Trojan על מחשב עובד לצורך איסוף סיסמאות ומידע",
+                                    "שינוי תודעה ציבורית באמצעות פוסטים כוזבים בטוויטר"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מהי מטרת CNE (Computer Network Exploitation)?",
+                        "options": [
+                                    "לחדור למערכות כדי לאסוף מודיעין ולייצר גישה ממושכת",
+                                    "לשנות את תודעת הציבור באמצעות מידע כוזב ופרסומים",
+                                    "להשבית שירותים חיוניים לאזרחים במדינה",
+                                    "לגרום נזק גלוי ומיידי למערכות המחשוב של הארגון"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "איזו מהפעולות הבאות שייכת ל-CNI?",
+                        "options": [
+                                    "פרסום ידיעות כוזבות במדיה החברתית כדי להשפיע על דעת הקהל",
+                                    "ביצוע התקפת DDoS על אתר האינטרנט של החברה",
+                                    "התקנת rootkit בשרתים הפנימיים של הארגון",
+                                    "שליחת קמפיין פישינג ממוקד לעובדי הארגון"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מה מבטיחה Confidentiality (סודיות) ב-CIA Triad?",
+                        "options": [
+                                    "שמידע לא ישתנה ללא אישור מפורש מהגורם המוסמך",
+                                    "שמידע סודי לא ייחשף לאנשים ללא הרשאה מתאימה",
+                                    "שהמידע יהיה זמין לכל מי שזקוק לו לצורך עבודתו",
+                                    "שהמערכת תמשיך לפעול גם במקרה של כשל חומרה"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "איזו דוגמה מתארת פגיעה ב-Integrity (שלמות)?",
+                        "options": [
+                                    "שינוי תיק רפואי על ידי מחיקת רשומת אלרגיה של מטופל",
+                                    "דליפת מספרי כרטיסי אשראי למאגר חיצוני",
+                                    "מחיקת קבצי גיבוי חשובים מהשרת המרכזי",
+                                    "חסימת גישה למשתמשים מורשים דרך חומת אש"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מהי המטרה של Availability (זמינות)?",
+                        "options": [
+                                    "להבטיח שרק משתמשים מורשים יוכלו לראות את המידע",
+                                    "להבטיח שהמידע לא משתנה ללא אישור מתאים",
+                                    "להבטיח שהמערכות פועלות במהירות והשירות זמין למורשים",
+                                    "להגן על המידע מפני גניבה או דליפה חיצונית"
+                        ],
+                        "correct": 2
+            },
+            {
+                        "question": "איזה עיקרון ב-CIA מבטיח שאף אחד לא יכול לגשת למידע ללא הרשאה?",
+                        "options": [
+                                    "Availability - זמינות המידע",
+                                    "Non-repudiation - אי-הכחשה",
+                                    "Confidentiality - סודיות המידע",
+                                    "Integrity - שלמות המידע"
+                        ],
+                        "correct": 2
+            },
+            {
+                        "question": "מה קורה כאשר פוגעים ב-Availability?",
+                        "options": [
+                                    "השירות נדחה או המערכת מושבתת למשתמשים מורשים",
+                                    "המידע משתנה או נמחק ללא הרשאה מתאימה",
+                                    "המידע נמחק לצמיתות מהמאגרים",
+                                    "המידע נחשף לגורמים לא מורשים מחוץ לארגון"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "איזו פעולה תומכת ב-Integrity?",
+                        "options": [
+                                    "גיבוי יומי של כל הנתונים לשרת חיצוני",
+                                    "שימוש בחומת אש להגנה על הרשת הפנימית",
+                                    "בדיקת checksums ושמירת גרסאות קודמות של קבצים",
+                                    "הצפנת נתונים בזמן מנוחה באמצעות אלגוריתם חזק"
+                        ],
+                        "correct": 2
+            },
+            {
+                        "question": "מהו האיום העיקרי על Confidentiality?",
+                        "options": [
+                                    "שינוי קבצי מערכת על ידי קוד זדוני",
+                                    "דליפת מידע או גניבת נתונים רגישים על ידי תוקף",
+                                    "התקפת כופרה שמצפינה קבצים ודורשת תשלום",
+                                    "התקפת DDoS שמשביתה את השירותים החיצוניים"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "איזה רכיב ב-CIA מושפע ישירות מהתקפת כופרה?",
+                        "options": [
+                                    "Availability בלבד - זמינות השירות",
+                                    "Confidentiality + Integrity + Availability יחד",
+                                    "Integrity בלבד - שלמות הנתונים",
+                                    "Confidentiality בלבד - סודיות הנתונים"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מה מאפיין אירוע סייבר בדרגת חומרה 'גבוהה / חמורה'?",
+                        "options": [
+                                    "איבוד מידע זניח עם השפעה מוגבלת על הפעילות",
+                                    "השפעה מהותית על פעילות החברה או פגיעה בחיי אדם",
+                                    "אובדן זמני של שירות לא קריטי לארגון",
+                                    "פגיעה לא משמעותית בפעילות העסקית השוטפת"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "מהי דרגת החומרה של אירוע שבו נגנבו פרטי כרטיסי אשראי של 500 לקוחות?",
+                        "options": [
+                                    "לא ניתן לקבוע ללא מידע נוסף על הנזק",
+                                    "נמוכה - השפעה זניחה על הפעילות",
+                                    "גבוהה - פגיעה מהותית בחיי אדם או בשירות חיוני",
+                                    "בינונית - השפעה משמעותית אך לא קריטית"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מהו עקרון ה-Zero Trust Model?",
+                        "options": [
+                                    "הגישה לכל נכס צריכה להיות מוגנת ומאומתת תמיד",
+                                    "להסתמך על חומת אש בלבד כהגנה עיקרית",
+                                    "להעניק גישה מלאה לכל העובדים בארגון",
+                                    "לבטוח בכל מי שנמצא בתוך הרשת הארגונית"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "איזו טענה נכונה לגבי Zero Trust?",
+                        "options": [
+                                    "הוא דורש אימות מתמשך לכל גישה לנכס בארגון",
+                                    "הוא רלוונטי רק לארגונים גדולים במיוחד",
+                                    "הוא מתמקד רק בהגנה על הרשת החיצונית של הארגון",
+                                    "הוא מבטל את הצורך בניהול הרשאות כלל"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מהי דרגת חומרה נמוכה?",
+                        "options": [
+                                    "פגיעה משמעותית במוניטין ובאמון הלקוחות",
+                                    "השבתת שירות חיוני לאזרחים במדינה",
+                                    "איבוד מידע זניח והשפעה מוגבלת על הפעילות",
+                                    "פגיעה בחיי אדם או בבריאות הציבור"
+                        ],
+                        "correct": 2
+            },
+            {
+                        "question": "מהו Risk (סיכון) בהקשר של אבטחת מידע?",
+                        "options": [
+                                    "פגם או חולשה בתכנון המערכת או ביישומה",
+                                    "צפי להפסד כהסתברות שאיום ינצל פגיעות עם תוצאה מזיקה",
+                                    "ישות חיצונית שתוקפת את המערכת באופן פעיל",
+                                    "פעולה או מכשיר שמפחיתים את רמת האיום"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "מהו Asset (נכס / משאב מערכת)?",
+                        "options": [
+                                    "רק נתונים המאוחסנים במערכת המידע",
+                                    "רק השרתים הפיזיים והתשתית החיצונית",
+                                    "רק המשתמשים והעובדים בארגון",
+                                    "נתונים, שירותים, יכולות עיבוד, חומרה, תוכנה ותיעוד"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מהו Threat (איום)?",
+                        "options": [
+                                    "פגם או חולשה קיימת במערכת המחשוב",
+                                    "הסתברות לנזק כספי בלבד",
+                                    "פעולה שמפחיתה את הסיכון לארגון",
+                                    "פוטנציאל להפרת האבטחה הקיים כאשר יש נסיבות או יכולת לגרום נזק"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מהי Vulnerability (פגיעות / חולשה)?",
+                        "options": [
+                                    "פגם בתכנון, ביישום או בניהול המערכת שניתן לנצל כדי להפר את מדיניות האבטחה",
+                                    "פעולה אקטיבית של תוקף חיצוני",
+                                    "צפי להפסד כספי כתוצאה מתקיפה",
+                                    "ישות חיצונית שתוקפת את המערכת"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מהו Countermeasure (אמצעי נגד)?",
+                        "options": [
+                                    "ישות שתוקפת את המערכת באופן פעיל",
+                                    "הסתברות לנזק כתוצאה מתקיפה",
+                                    "פגם קיים במערכת המחשוב",
+                                    "פעולה, מכשיר או פרוצדורה שמפחיתים איום או פגיעות"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מהו Exploit?",
+                        "options": [
+                                    "סוג מסוים של וירוס מחשב",
+                                    "תוכנית פוגען שנועדה לנצל פגיעות קיימת במערכת",
+                                    "אמצעי הגנה על המערכת מפני תקיפות",
+                                    "שיטת הצפנה מתקדמת לנתונים"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "מי הוא Adversary / Threat Agent?",
+                        "options": [
+                                    "תוכנה שמגנה על המערכת מפני תקיפות",
+                                    "שרת גיבוי חיצוני",
+                                    "אדם או ישות שתוקפת מערכת או מהווה איום עליה",
+                                    "מנהל אבטחת מידע בארגון"
+                        ],
+                        "correct": 2
+            },
+            {
+                        "question": "מה ההבדל בין Threat ל-Vulnerability?",
+                        "options": [
+                                    "Threat הוא רק תוקף חיצוני לארגון",
+                                    "אין הבדל מהותי בין שני המושגים",
+                                    "Vulnerability הוא הפגם או החולשה, Threat הוא הפוטנציאל לנצל אותה",
+                                    "Threat הוא הפגם הקיים, Vulnerability הוא הפוטנציאל לנזק"
+                        ],
+                        "correct": 2
+            },
+            {
+                        "question": "איזו דוגמה מתארת Vulnerability?",
+                        "options": [
+                                    "סיסמה חלשה או תוכנה לא מעודכנת עם חולשות ידועות",
+                                    "התקנת תוכנת כופרה על השרתים",
+                                    "תוקף חיצוני ששולח מייל פישינג לעובדים",
+                                    "גניבת נתונים רגישים מהמאגר"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מהו Risk בהקשר של אבטחת מידע?",
+                        "options": [
+                                    "רק וירוס מחשב שמתפשט ברשת",
+                                    "הסתברות שאיום ינצל פגיעות ויגרום נזק לארגון",
+                                    "רק אובדן כספי ישיר כתוצאה מתקיפה",
+                                    "רק תקיפה חיצונית על ידי האקרים"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "מהי Active Attack?",
+                        "options": [
+                                    "ניסיון ללמוד מידע מהמערכת ללא שינוי כלשהו",
+                                    "ניסיון לשנות משאבי מערכת או להשפיע על פעולתם",
+                                    "התקפה שמתבצעת רק מחוץ לרשת הארגונית",
+                                    "התקפה שמתבצעת רק על ידי עובדים פנימיים"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "מהי Passive Attack?",
+                        "options": [
+                                    "התקפה הרסנית שגורמת נזק גלוי",
+                                    "ניסיון לשנות נתונים במערכת באופן פעיל",
+                                    "התקפה שדורשת הרשאות מנהל מערכת",
+                                    "ניסיון ללמוד או לעשות שימוש במידע מהמערכת ללא השפעה על המשאבים"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מהי Inside Attack?",
+                        "options": [
+                                    "התקפה שמתבצעת על ידי גורם חיצוני לארגון",
+                                    "התקפה על ידי תוכנה זדונית בלבד",
+                                    "התקפה שמתבצעת רק דרך האינטרנט הציבורי",
+                                    "התקפה שיזומה על ידי ישות בתוך היקף האבטחה (גורם פנימי מורשה)"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מהי Outside Attack?",
+                        "options": [
+                                    "התקפה שיזומה על ידי עובד מורשה בארגון",
+                                    "התקפה שיזומה מחוץ להיקף האבטחה על ידי משתמש לא מורשה",
+                                    "התקפה פנימית בלבד בתוך הרשת",
+                                    "התקפה על ידי תוכנה לגיטימית"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "איזו דוגמה מתארת Inside Attack?",
+                        "options": [
+                                    "עובד שמשתמש בהרשאותיו כדי לגנוב מידע סודי",
+                                    "התקפת DDoS מאלפי מחשבים ברחבי העולם",
+                                    "האקר חיצוני שמנצל חולשת SQL Injection בשרת",
+                                    "תוקף חיצוני ששולח קמפיין פישינג לעובדים"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מי יכול להיות תוקף חיצוני פוטנציאלי?",
+                        "options": [
+                                    "תוקפים חובבים, פושעים מאורגנים, טרוריסטים וממשלות עוינות",
+                                    "רק מתכנתים שעובדים בחברה",
+                                    "רק עובדים לשעבר של הארגון",
+                                    "רק ספקי שירותי ענן חיצוניים"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מהם ארבעת השלבים בהתמודדות עם אירוע סייבר?",
+                        "options": [
+                                    "Prevention, Detection, Response, Recovery",
+                                    "תקיפה, הגנה, ניטור, דיווח לרשויות",
+                                    "גילוי, ניתוח, תיקון, סגירת האירוע",
+                                    "זיהוי, תגובה, התאוששות, מניעה"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מהו SSO (Single Sign-On)?",
+                        "options": [
+                                    "מזדהים פעם אחת ויש הרשאות לכל המערכות המורשות",
+                                    "הזדהות נפרדת וייחודית לכל מערכת בנפרד",
+                                    "שיטה להצפנת סיסמאות באמצעות אלגוריתם חזק",
+                                    "מנגנון לגיבוי סיסמאות באופן אוטומטי"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מהו RBAC (Role-Based Access Control)?",
+                        "options": [
+                                    "מתן הרשאות לפי זהות אישית של כל עובד",
+                                    "מתן הרשאות מלאות לכל העובדים בארגון",
+                                    "מתן הרשאות לפי תפקיד (role) בארגון",
+                                    "ביטול כל ההרשאות באופן אוטומטי"
+                        ],
+                        "correct": 2
+            },
+            {
+                        "question": "מהו Hash בהקשר של אבטחת מידע?",
+                        "options": [
+                                    "שיטה למחיקת נתונים רגישים באופן בטוח",
+                                    "שיטה להצפנת נתונים רגישים כמו סיסמאות וכרטיסי אשראי",
+                                    "שיטה לניטור תעבורת רשת בזמן אמת",
+                                    "שיטה להעברת קבצים גדולים ברשת"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "מה היתרון של RBAC?",
+                        "options": [
+                                    "הוא מאפשר גישה ללא צורך באימות",
+                                    "הרשאות ניתנות לפי תפקיד ומצמצמות סיכון לארגון",
+                                    "אין צורך בניהול משתמשים והרשאות",
+                                    "כל עובד מקבל את כל ההרשאות האפשריות"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "מה כולל תהליך ה-Recovery באירוע סייבר?",
+                        "options": [
+                                    "דיווח לרשויות בלבד ללא תיקון",
+                                    "התאוששות והחזרת המערכות לפעולה תקינה",
+                                    "זיהוי האירוע בלבד ללא פעולה נוספת",
+                                    "מניעת האירוע מראש לפני שהוא קורה"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "מהי תולעת (Worm)?",
+                        "options": [
+                                    "תוכנה שמזייפת פונקציונליות לגיטימית של תוכנה אחרת",
+                                    "תוכנה שמפיצה עותקים של עצמה למחשבים אחרים ללא צורך במארח",
+                                    "תוכנה ש'מתפוצצת' כאשר מתרחש מצב מסוים מראש",
+                                    "תוכנה שמאפשרת גישה לא מורשית למערכת"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "מהו Logic Bomb?",
+                        "options": [
+                                    "תוכנה שמתחזה לתוכנה לגיטימית",
+                                    "קוד זדוני ש'מתפוצצת' (מפעיל את המטען) כאשר מתרחש מצב מסוים",
+                                    "תוכנה שגונבת הקשות מקלדת באופן חשאי",
+                                    "תוכנה שמפיצה את עצמה אוטומטית ברשת"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "מהו סוס טרויאני (Trojan Horse)?",
+                        "options": [
+                                    "תוכנה שמוחקת קבצים באופן אקראי",
+                                    "תוכנה שמתפשטת כמו וירוס בין מחשבים",
+                                    "תוכנה שמאפשרת גישה מרחוק למחשב הנגוע",
+                                    "תוכנה שמזייפת או מכילה פונקציונליות נוספת זדונית בתוך תוכנה לגיטימית"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מהו Backdoor (Trapdoor)?",
+                        "options": [
+                                    "מנגנון שמאפשר גישה לא מורשית לפונקציונליות של המערכת",
+                                    "תוכנה שגונבת סיסמאות מהמשתמש",
+                                    "תוכנה שמצפינה קבצים ודורשת תשלום",
+                                    "וירוס שמתפשט דרך דואר אלקטרוני"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מה עושה Keylogger?",
+                        "options": [
+                                    "מוחק קבצי מערכת חשובים",
+                                    "מצפין קבצים באמצעות אלגוריתם חזק",
+                                    "משבש תקשורת רשת בין מחשבים",
+                                    "לוכד ומתעד הקשות מקלדת כדי לגנוב מידע רגיש"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מהו Rootkit?",
+                        "options": [
+                                    "סוג של תוכנת אנטי-וירוס מתקדמת",
+                                    "כלי האקר מתוחכם שמאפשר קבלת גישה ברמת ה-root תוך הסתרה",
+                                    "תוכנה לגיטימית לניהול שרתים מרחוק",
+                                    "וירוס פשוט שמתפשט במהירות"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "מהו Malware?",
+                        "options": [
+                                    "תוכנה, קוד או קובץ שנכתבו במטרה לגרום נזק, לגנוב מידע או להשיג גישה לא מורשית",
+                                    "סוג של תוכנת אנטי-וירוס",
+                                    "תוכנה לגיטימית לשימוש יומיומי",
+                                    "כלי לניטור תעבורת רשת"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מהו Payload ב-Malware?",
+                        "options": [
+                                    "הממשק הגרפי עם המשתמש",
+                                    "החלק של התוכנה שמפיץ אותה למחשבים אחרים",
+                                    "הפעולות הזדוניות שהתוכנית מבצעת (כמו מחיקה, הצפנה, גניבה)",
+                                    "הקוד שמאפשר התפשטות אוטומטית"
+                        ],
+                        "correct": 2
+            },
+            {
+                        "question": "מהו APT (Advanced Persistent Threat)?",
+                        "options": [
+                                    "תקיפה מתוחכמת, מתמשכת וממוקדת שמבוצעת לרוב על ידי גורמים מתקדמים",
+                                    "סוג מסוים של תוכנת כופרה",
+                                    "התקפת DDoS על שרתים",
+                                    "וירוס פשוט שמתפשט במהירות בין מחשבים"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "איזו תוכנה זדונית דורשת מארח (Host) ופעולה אנושית כדי להתפשט?",
+                        "options": [
+                                    "Rootkit - כלי הסתרה",
+                                    "Virus - וירוס מחשב",
+                                    "Trojan - סוס טרויאני",
+                                    "Worm - תולעת מחשב"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "מה ההבדל העיקרי בין Virus ל-Worm?",
+                        "options": [
+                                    "Worm דורש מארח, Virus לא דורש מארח כלל",
+                                    "Virus הוא תמיד חלק מ-Worm",
+                                    "אין הבדל מהותי בין שני סוגי התוכנות",
+                                    "Virus דורש מארח ופעולה אנושית, Worm מתפשט אוטומטית ללא צורך במארח"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "איזו מהאפשרויות היא דוגמה ל-Malware?",
+                        "options": [
+                                    "Microsoft Word - תוכנת עיבוד תמלילים",
+                                    "דפדפן אינטרנט לגלישה באינטרנט",
+                                    "תוכנת אנטי-וירוס להגנה על המחשב",
+                                    "תוכנת כופרה שמצפינה קבצים ודורשת תשלום כופר"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מהו ההבדל העיקרי בין Virus ל-Malware?",
+                        "options": [
+                                    "Malware היא קטגוריית-על, Virus היא תת-קטגוריה שדורשת מארח ופעולה אנושית",
+                                    "אין הבדל בין שני המושגים",
+                                    "Virus הוא תמיד חלק מ-Malware אבל לא להיפך",
+                                    "Virus היא קטגוריית-על, Malware היא תת-קטגוריה ספציפית"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מהי התקפת HTTP GET Attack?",
+                        "options": [
+                                    "התקפה שגונבת סיסמאות מהמשתמשים",
+                                    "שליחת כמויות אדירות של בקשות POST לשרת",
+                                    "התקפה שמשנה תוכן ישירות בשרת",
+                                    "פניות לאתר לקבלת מידע או הורדת דף - פעילות רגילה בכמויות גדולות"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מהי התקפת HTTP POST Attack?",
+                        "options": [
+                                    "פניות רגילות לקבלת מידע מהשרת",
+                                    "התקפה על חומרה פיזית בלבד",
+                                    "פניות 'דחיפת מידע' לאתר בכמויות אדירות, בדרך כלל לבסיס הנתונים",
+                                    "התקפה חשאית ללא השפעה על השרת"
+                        ],
+                        "correct": 2
+            },
+            {
+                        "question": "מהי Man-in-the-Middle Attack?",
+                        "options": [
+                                    "התקפה שבה תוקף יושב בזרימת הנתונים, מתחזה לשולח ולמקבל ומשנה תוכן",
+                                    "התקפה שבה תוקף מוחק קבצים מהשרת",
+                                    "התקפה שבה תוקף משבש תקשורת בין מחשבים",
+                                    "התקפה שבה תוקף גונב חומרה פיזית"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מהם Macro and Scripting Viruses?",
+                        "options": [
+                                    "וירוסים שמשתמשים ב-Macro חבוי בתוך קבצי Office שמפעיל פקודות במערכת ההפעלה",
+                                    "וירוסים שמתפשטים דרך התקני USB בלבד",
+                                    "וירוסים שפועלים רק בשעות הלילה",
+                                    "וירוסים שתוקפים רק קבצי מערכת חשובים"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "איזו התקפה משפיעה על שלמות הנתונים בזמן העברה?",
+                        "options": [
+                                    "Keylogger - גניבת הקשות מקלדת",
+                                    "Worm - תולעת שמתפשטת אוטומטית",
+                                    "Man-in-the-Middle Attack - יירוט ושינוי תוכן",
+                                    "HTTP GET Attack - בקשות לקבלת מידע"
+                        ],
+                        "correct": 2
+            },
+            {
+                        "question": "מהו ההבדל בין Virus ל-Trojan?",
+                        "options": [
+                                    "Virus הוא תמיד Trojan בתחפושת",
+                                    "Virus דורש מארח ופעולה אנושית, Trojan מתחזה לתוכנה לגיטימית",
+                                    "אין הבדל בין שני סוגי התוכנות הזדוניות",
+                                    "Trojan דורש מארח, Virus לא דורש מארח כלל"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "כיצד פועל Signature Scanners באנטי-וירוס?",
+                        "options": [
+                                    "משווה תבניות ביטים (bit patterns) או Hash של קבצים למאגר חתימות ידועות",
+                                    "בודק את אורך הקובץ בלבד ללא בדיקה נוספת",
+                                    "מוחק קבצים חשודים באופן אוטומטי",
+                                    "בודק התנהגות חשודה של קבצים בזמן ריצה"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מהו היתרון העיקרי של Signature Scanners?",
+                        "options": [
+                                    "פועל ללא צורך במאגר נתונים חיצוני",
+                                    "דורש עדכונים תכופים פחות מאשר שיטות אחרות",
+                                    "מסוגל לזהות וירוסים חדשים לגמרי שלא נראו בעבר",
+                                    "מדויק מאוד ומהיר עם אפס התראות שווא על קבצים תמימים"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מהו החיסרון העיקרי של Signature Scanners?",
+                        "options": [
+                                    "עיוור לחלוטין בפני איומים חדשים (Zero-Day) או וירוסים ששונו",
+                                    "דורש חיבור לאינטרנט תמידי",
+                                    "מייצר הרבה התראות שווא על קבצים תמימים",
+                                    "איטי מאוד בבדיקת קבצים גדולים"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "כיצד פועלת שיטת Heuristics באנטי-וירוס?",
+                        "options": [
+                                    "משווה Hash של הקובץ למאגר בלבד",
+                                    "משתמשת בכללי אצבע, ניתוח התנהגות ובדיקות שלמות (checksums) לזיהוי חשוד",
+                                    "פועלת רק על קבצי Office בלבד",
+                                    "מוחקת קבצים חשודים באופן אוטומטי"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "מהו היתרון של Heuristics לעומת Signature Scanners?",
+                        "options": [
+                                    "מהיר יותר בבדיקת קבצים",
+                                    "מדויק יותר על וירוסים ידועים מהעבר",
+                                    "אין התראות שווא כלל",
+                                    "מסוגל לגלות וירוסים חדשים (Zero-Day) או גרסאות משונות"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מהו השלב הראשון בתקיפת APT?",
+                        "options": [
+                                    "Establish Foothold - ביסוס אחיזה ראשונית",
+                                    "Research and Reconnaissance - מחקר ואיסוף מודיעין",
+                                    "Initial Attack - התקיפה הראשונית",
+                                    "Gather Specific Data - איסוף מידע ספציפי"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "בשלב Research and Reconnaissance, מה עושה התוקף?",
+                        "options": [
+                                    "אוסף מידע על הארגון כדי למצוא נקודות תורפה (סריקות, LinkedIn וכו')",
+                                    "מצפין קבצים רגישים בשרתים",
+                                    "מתקין Trojan על מחשבים בארגון",
+                                    "מוחק גיבויים חשובים של הארגון"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מה קורה בשלב Initial Attack?",
+                        "options": [
+                                    "התוקף משאיר דלת אחורית נסתרת",
+                                    "התוקף מנסה לפרוץ בפועל את 'הדלת הראשונה' באמצעות המידע שנאסף",
+                                    "התוקף אוסף מידע ספציפי מהשרתים",
+                                    "התוקף מרחיב את הגישה ברשת הפנימית"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "מהי המטרה של שלב Establish Foothold?",
+                        "options": [
+                                    "לאסוף מודיעין חיצוני על הארגון",
+                                    "להצפין נתונים רגישים",
+                                    "להבטיח שליטה יציבה על המחשב שנפרץ (בדרך כלל באמצעות Trojan/Backdoor)",
+                                    "להעלות הרשאות למנהל מערכת"
+                        ],
+                        "correct": 2
+            },
+            {
+                        "question": "מה עושה התוקף בשלב Enable Persistence?",
+                        "options": [
+                                    "דואג שהגישה לא תיעלם גם אחרי אתחול מחדש (שינוי הגדרות, יצירת משתמשים חדשים)",
+                                    "מוחק קבצים חשובים מהשרת",
+                                    "אוסף מידע רגיש מהמאגרים",
+                                    "מתקשר לשרת C2 חיצוני"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מה קורה בשלב Domain / Enterprise Resource Access?",
+                        "options": [
+                                    "התוקף מצפין קבצים באמצעות כופרה",
+                                    "התוקף מרחיב את הטווח למערכות ניהול מרכזיות כמו Active Directory",
+                                    "התוקף יוצא מהרשת באופן סופי",
+                                    "התוקף נשאר במחשב הבודד שנפרץ"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "מהי Lateral Expansion בתקיפת APT?",
+                        "options": [
+                                    "התוקף נע 'רוחבית' ממחשב למחשב בתוך הרשת הפנימית כדי למצוא שרתים רגישים",
+                                    "התוקף אוסף מודיעין חיצוני",
+                                    "התוקף נשאר במחשב הראשון שנפרץ",
+                                    "התוקף מעלה הרשאות למנהל"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "למה התוקף צריך Escalate Privilege?",
+                        "options": [
+                                    "כדי להתקין תוכנת אנטי-וירוס",
+                                    "כדי לשלוח מיילים פנימיים",
+                                    "כדי לגלוש באינטרנט בחופשיות",
+                                    "כדי לבצע פעולות משמעותיות כמו גישה לבסיסי נתונים או מחיקת גיבויים (הרשאות מנהל)"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מה קורה בשלב Gather Specific Data?",
+                        "options": [
+                                    "התוקף משבש תקשורת בין מחשבים",
+                                    "התוקף יוצא מהרשת באופן סופי",
+                                    "התוקף מתקין וירוס נוסף",
+                                    "התוקף מגיע ל'אוצר' - שרתים עם מידע בעל ערך (רפואי, כרטיסי אשראי, קניין רוחני) ומרכז אותו"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מה כולל שלב Encrypt and Exfiltrate Data?",
+                        "options": [
+                                    "התוקף משאיר דלת אחורית נסתרת",
+                                    "התוקף רק אוסף מידע ללא פעולה נוספת",
+                                    "התוקף מבריח מידע רגיש החוצה ואז מצפין את המערכות (אופייני לכופרה)",
+                                    "התוקף מוחק את כל הקבצים באופן אקראי"
+                        ],
+                        "correct": 2
+            },
+            {
+                        "question": "למה חשוב שלב Maintain Presence?",
+                        "options": [
+                                    "כדי להצפין קבצים רגישים",
+                                    "כדי להשבית את המערכת באופן סופי",
+                                    "כדי למחוק עקבות מהמערכת",
+                                    "כדי שהתוקף יוכל לחזור לרשת בעתיד מבלי להתחיל הכל מחדש"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "איזה שלב מגיע אחרי Lateral Expansion?",
+                        "options": [
+                                    "Escalate Privilege - העלאת הרשאות",
+                                    "Establish Foothold - ביסוס אחיזה",
+                                    "Initial Attack - התקיפה הראשונית",
+                                    "Research and Reconnaissance - מחקר ראשוני"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "למה ארגון חייב LOG של פעילות במערכות?",
+                        "options": [
+                                    "לניטור, תחקור עבירות, ודרישות רגולציה (דוחות כספיים, איכות סביבה)",
+                                    "רק לצורך גיבוי אוטומטי של נתונים",
+                                    "רק לצורך שיווק ופרסום",
+                                    "רק לצורך ניטור ביצועי עובדים"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מהו Data Masking (התממה)?",
+                        "options": [
+                                    "מחיקת נתונים רגישים באופן סופי",
+                                    "הצפנת כל הנתונים באמצעות אלגוריתם חזק",
+                                    "הסתרת זיהוי מידע בשימוש בנתונים הנוגעים לפרטיות או מידע פיננסי (בסביבות פיתוח/TEST)",
+                                    "גיבוי נתונים לשרת חיצוני"
+                        ],
+                        "correct": 2
+            },
+            {
+                        "question": "איך מתבצע Data Masking בדרך כלל?",
+                        "options": [
+                                    "על ידי העברת נתונים לענן ציבורי",
+                                    "על ידי מחיקת כל הנתונים הרגישים",
+                                    "על ידי הדפסת נתונים על נייר",
+                                    "על ידי תוכניות שמשנות נתונים לפי אלגוריתם (ORACLE, SAP) או באופן דינמי לפי הרשאות"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מהי התקפת Keystroke Logger חומרה?",
+                        "options": [
+                                    "התקפה דרך האינטרנט בלבד",
+                                    "התקנת תוכנה שגונבת סיסמאות מהמשתמש",
+                                    "התקפה על בסיס נתונים מרכזי",
+                                    "שינוי Driver של מקלדת או שתילת אמצעי האזנה פיזי כדי לגנוב הקשות"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מהו DLL Hijacking?",
+                        "options": [
+                                    "החלפת ספריית מערכת (DLL) בספרייה זדונית",
+                                    "גניבת סיסמאות דרך דואר אלקטרוני",
+                                    "התקנת וירוס בזיכרון המחשב",
+                                    "התקפה על חומת אש של הארגון"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מהו Active Directory?",
+                        "options": [
+                                    "תוכנה לניהול קבצים במחשב",
+                                    "מערכת גיבוי אוטומטית",
+                                    "אוסף שירותים לניהול זהות וגישה עבור משאבים ברשת",
+                                    "סוג של תוכנת אנטי-וירוס"
+                        ],
+                        "correct": 2
+            },
+            {
+                        "question": "מהו GPO ב-Active Directory?",
+                        "options": [
+                                    "סוג של וירוס מחשב",
+                                    "כלי לניטור תעבורת רשת",
+                                    "קובץ גיבוי של הנתונים",
+                                    "אובייקט Policy שניתן לשייך למשתמשים, קבוצות ומחשבים להגדרת הגדרות אבטחה"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מהם הממשקים העיקריים של תוכנה שבהם ניתן להזין נוזקות?",
+                        "options": [
+                                    "רק עכבר ומקלדת",
+                                    "רק הדפסה לנייר",
+                                    "רק ממשק המשתמש הגרפי",
+                                    "Filesystem, Database, Drivers, API, Server-Client תקשורת"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מהי אחת הבעיות הנפוצות בפיתוח תוכנה לא מאובטח?",
+                        "options": [
+                                    "אי בדיקת שדות קלט (Buffer Overflow, Injection Flaws)",
+                                    "בדיקות אוטומטיות של הקוד",
+                                    "שימוש בספריות בדוקות ומאובטחות",
+                                    "שימוש ב-Hash לסיסמאות"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מה ההבדל בין SDLC רגיל ל-Secure SDLC?",
+                        "options": [
+                                    "Secure SDLC משלב פעילויות אבטחה בכל שלב (Risk Assessment, Threat Modeling, SAST, DAST וכו')",
+                                    "אין הבדל בין שני התהליכים",
+                                    "Secure SDLC ארוך יותר בלבד",
+                                    "Secure SDLC מתמקד רק בבדיקות סופיות"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מה קורה בשלב Risk Assessment ב-Secure SDLC?",
+                        "options": [
+                                    "זיהוי מידע שהאפליקציה תטפל בו והנזק אם ידלוף (קביעת פרופיל סיכון)",
+                                    "פריסה סופית לייצור",
+                                    "בדיקות חדירה על ידי צוות חיצוני",
+                                    "כתיבת קוד בפועל על ידי המתכנתים"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מה עושים ב-Threat Modeling & Design Review?",
+                        "options": [
+                                    "מאמנים עובדים על שימוש במערכת",
+                                    "מתקינים שרתים חדשים",
+                                    "סורקים קוד אוטומטית באמצעות כלים",
+                                    "משרטטים זרימת נתונים ומחפשים נקודות תורפה פוטנציאליות (חושבים כמו תוקף)"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מהו SAST (Static Application Security Testing)?",
+                        "options": [
+                                    "בדיקות חדירה ידניות על ידי מומחים",
+                                    "בדיקות דינמיות בזמן ריצה של האפליקציה",
+                                    "סקירת לוגים של המערכת",
+                                    "סריקה אוטומטית של קוד המקור (ללא הרצה) למציאת חולשות אבטחה"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מה כולל שלב Security Testing & Code Review?",
+                        "options": [
+                                    "רק גיבוי של הנתונים",
+                                    "רק בדיקות אוטומטיות של הקוד",
+                                    "רק כתיבת תיעוד טכני",
+                                    "Code Review ידני + Security Testing דינמי (DAST) + ניסיונות פריצה"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מה קורה בשלב Security Assessment & Secure Configuration?",
+                        "options": [
+                                    "עיצוב מסכי המשתמש",
+                                    "איסוף דרישות מהלקוח",
+                                    "בדיקה סופית + Secure Configuration (שינוי סיסמאות ברירת מחדל, סגירת פורטים) + Penetration Testing",
+                                    "כתיבת קוד חדש למערכת"
+                        ],
+                        "correct": 2
+            },
+            {
+                        "question": "למה חשוב Static Analysis (SAST) מוקדם בתהליך?",
+                        "options": [
+                                    "כי זה לא דורש ידע טכני מיוחד",
+                                    "כי זה הדבר היחיד שצריך לעשות בתהליך",
+                                    "כי זה זול יותר לתקן שגיאות אבטחה לפני שהקוד מגיע לייצור",
+                                    "כי זה מהיר יותר מכל הבדיקות האחרות"
+                        ],
+                        "correct": 2
+            },
+            {
+                        "question": "מהו היתרון העיקרי של מעבר לענן (CAPEX ל-OPEX)?",
+                        "options": [
+                                    "צורך לרכוש חומרה יקרה מראש",
+                                    "אובדן גמישות ברכש משאבים",
+                                    "תלות באנשי IT פנימיים",
+                                    "מעבר מתקציב השקעות (רכישה) לתקציב הוצאות (שכירות) + תשלום לפי צריכה"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מהו Hybrid Cloud?",
+                        "options": [
+                                    "ענן ציבורי בלבד ללא ענן פרטי",
+                                    "ענן ללא חיבור לאינטרנט כלל",
+                                    "ענן פרטי בלבד ללא חיבור חיצוני",
+                                    "שילוב של שני עננים או יותר (פרטי + ציבורי) שנותרים ישויות ייחודיות אך קשורים"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מה מאפיין Public Cloud?",
+                        "options": [
+                                    "מתאים רק לארגונים קטנים",
+                                    "התשתית בבעלות הארגון בלבד",
+                                    "תשתית זמינה לציבור הרחב, בבעלות ספק חיצוני, עם דאגה עיקרית לאבטחה",
+                                    "אין תשלום לפי שימוש"
+                        ],
+                        "correct": 2
+            },
+            {
+                        "question": "במודל IaaS, מה באחריות הלקוח?",
+                        "options": [
+                                    "רק החומרה הפיזית והתשתית",
+                                    "רק הרשת והתקשורת",
+                                    "Data & Access, Applications, Runtime, Operating System, Virtual Machine",
+                                    "רק הנתונים והגישה למערכת"
+                        ],
+                        "correct": 2
+            },
+            {
+                        "question": "במודל SaaS, מה באחריות הלקוח?",
+                        "options": [
+                                    "רק Data & Access (המידע וההרשאות)",
+                                    "אין אחריות ללקוח כלל",
+                                    "רק מערכת ההפעלה של השרתים",
+                                    "הכל - מהחומרה ועד האפליקציה"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מהו Cloud Broker?",
+                        "options": [
+                                    "כלי לגיבוי נתונים",
+                                    "גורם שמחבר, מנהל ומתווך בין שירותי ענן שונים (Multi-Cloud / Hybrid)",
+                                    "ספק ענן יחיד בלבד",
+                                    "סוג של תוכנת אנטי-וירוס"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "מהו CASB (Cloud Access Security Broker)?",
+                        "options": [
+                                    "כלי לניהול חשבונות משתמשים",
+                                    "פתרון שמספק Visibility, Protection ו-Threat Protection לתעבורה לענן",
+                                    "סוג של Firewall לרשת",
+                                    "ספק שירותי ענן"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "מהי Cloud Misconfiguration?",
+                        "options": [
+                                    "בעיה ברשת התקשורת",
+                                    "הגדרות אבטחה שגויות מצד הלקוח שחושפות מידע",
+                                    "הגדרות אבטחה נכונות מצד הספק",
+                                    "שגיאה בחומרה הפיזית"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "מהו היתרון של ענן לארגונים גלובליים?",
+                        "options": [
+                                    "ניתן להעתיק יישומים לאזור קרוב גיאוגרפית",
+                                    "תלות באנשי IT מקומיים",
+                                    "עלות גבוהה יותר",
+                                    "אין גמישות בפריסה"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "ב-SaaS, מי אחראי על הצפנת המידע ב-Transit וב-Rest?",
+                        "options": [
+                                    "ספק הענן (עם אחריות הלקוח על הרשאות וגישה)",
+                                    "הלקוח בלבד ללא עזרה",
+                                    "רק הלקוח על Transit בלבד",
+                                    "אף אחד מהצדדים"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מהו עקרון 'החוליה החלשה'?",
+                        "options": [
+                                    "אין חוליות חלשות במערכת מאובטחת",
+                                    "הרכיב החזק ביותר קובע את חוזק המערכת",
+                                    "רק החומרה קובעת את חוזק המערכת",
+                                    "הרכיב החלש ביותר מבחינה אבטחתית הוא הקובע את חוזק המערכת"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מהו עקרון 'הרשאה מינימלית' (Least Privilege)?",
+                        "options": [
+                                    "ההרשאות צריכות להיות מינימום הנדרש לצורך ביצוע העבודה (Need to Know)",
+                                    "לבטל את כל ההרשאות בארגון",
+                                    "להעניק הרשאות רק למנהלים בכירים",
+                                    "להעניק לכל עובד את כל ההרשאות האפשריות"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מהי 'הגנת עומק' (Defense in Depth)?",
+                        "options": [
+                                    "להתקין אנטי-וירוס בלבד",
+                                    "להסתמך על חומת אש אחת בלבד",
+                                    "לבנות מספר קווי הגנה כדי למנוע תלות בנקודה קריטית אחת",
+                                    "להשתמש רק בהצפנה כהגנה"
+                        ],
+                        "correct": 2
+            },
+            {
+                        "question": "אילו בדיקות קלט מומלץ לבצע?",
+                        "options": [
+                                    "רק בדיקת סיסמה חזקה",
+                                    "בדיקות אורך, טווח, סוג ופורמט של הקלט",
+                                    "רק בדיקת אורך הקלט",
+                                    "אין צורך בבדיקות קלט כלל"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "למה חשוב להפריד בין סביבת פיתוח ל-Production?",
+                        "options": [
+                                    "כי זה לא חשוב כלל",
+                                    "כי זה יקר יותר לתחזק שתי סביבות",
+                                    "כדי למנוע ממפתחים לגשת לנתונים אמיתיים ולצמצם סיכון",
+                                    "כי זה מאט את תהליך הפיתוח"
+                        ],
+                        "correct": 2
+            },
+            {
+                        "question": "איפה יש לשמור לוגים (Logs) כדי שיהיו אמינים?",
+                        "options": [
+                                    "בקובץ טקסט פשוט על שולחן העבודה",
+                                    "באזור מוגן נפרד מהקוד הרגיל",
+                                    "רק בזיכרון המחשב",
+                                    "באותו מקום כמו הקוד הרגיל"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "מהו Prompt Engineering?",
+                        "options": [
+                                    "הנדסת הנחיות שמתמקדת בהיבטים הטכניים סביב ההנחיה ל-LLM לשיפור תוצאות",
+                                    "ניהול שרתים פיזיים",
+                                    "כתיבת קוד ב-Python בלבד",
+                                    "עיצוב גרפי של ממשקים"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מהו RAG (Retrieval-Augmented Generation)?",
+                        "options": [
+                                    "פרוטוקול תקשורת ברשת",
+                                    "טכנולוגיה שמאפשרת למודלי שפה לגשת למאגרי מידע חיצוניים בזמן אמת לייצור תשובות מדויקות",
+                                    "סוג של וירוס מחשב",
+                                    "שיטת הצפנה לנתונים"
+                        ],
+                        "correct": 1
+            },
+            {
+                        "question": "מהו Agentic AI?",
+                        "options": [
+                                    "מודל שפה פשוט ללא יכולות מתקדמות",
+                                    "כלי לעריכת תמונות דיגיטליות",
+                                    "סוג של תוכנת אנטי-וירוס",
+                                    "מערכות בינה מלאכותית שיכולות לתכנן, לבצע משימות ולהתאים התנהגות באופן עצמאי"
+                        ],
+                        "correct": 3
+            },
+            {
+                        "question": "מהו Human-in-the-Loop (HITL)?",
+                        "options": [
+                                    "דפוס שבו סוכנים עוצרים לבקש קלט אנושי, אישור או הדרכה לפני פעולות בסיכון גבוה",
+                                    "מערכת שפועלת ללא כל התערבות אנושית",
+                                    "סוג של התקפת סייבר",
+                                    "שיטת גיבוי אוטומטית"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מהו Tool Calling / Function Calling?",
+                        "options": [
+                                    "היכולת של LLM או סוכן להפעיל כלים חיצוניים, API או פונקציות לביצוע משימות",
+                                    "סוג של וירוס מחשב",
+                                    "שיטת ניטור רשת",
+                                    "קריאה ידנית של פונקציות על ידי המתכנת"
+                        ],
+                        "correct": 0
+            },
+            {
+                        "question": "מהו Model Context Protocol (MCP)?",
+                        "options": [
+                                    "סוג של Firewall לרשת",
+                                    "מערכת הפעלה למחשבים",
+                                    "תקן פתוח שפותח על ידי Anthropic לחיבור סוכני AI למקורות נתונים חיצוניים וכלים",
+                                    "פרוטוקול הצפנה לנתונים"
+                        ],
+                        "correct": 2
+            }
+];
+        let currentQuestions = [];
+        let currentIndex = 0;
+        let score = 0;
+        let userAnswers = [];
+        let isAnswered = false;
+        
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+        
+        function startQuiz(randomMode = false) {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            if (randomMode) {
+                currentQuestions = shuffleArray(allQuestions).slice(0, 50);
+            } else {
+                currentQuestions = [...allQuestions];
+            }
+            currentIndex = 0;
+            score = 0;
+            userAnswers = new Array(currentQuestions.length).fill(null);
+            isAnswered = false;
+            updateHeader();
+            showQuestion();
+        }
+        
+        function updateHeader() {
+            document.getElementById('total-q-top').innerText = currentQuestions.length;
+            document.getElementById('score-top').innerText = `${score}/${currentQuestions.length}`;
+        }
+        
+        function updateProgress() {
+            const progressPercent = ((currentIndex) / currentQuestions.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+            document.getElementById('q-number-top').innerText = String(currentIndex + 1).padStart(2, '0');
+            document.getElementById('score-top').innerText = `${score}/${currentQuestions.length}`;
+            document.getElementById('q-badge').innerText = String(currentIndex + 1).padStart(2, '0');
+        }
+        
+        function showQuestion() {
+            const q = currentQuestions[currentIndex];
+            isAnswered = false;
+            document.getElementById('question-text').innerHTML = q.question;
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            q.options.forEach((optionText, index) => {
+                const btn = document.createElement('button');
+                btn.className = `option-btn w-full text-right p-4 pr-5 rounded-2xl border border-slate-600 bg-slate-800 hover:bg-slate-700 text-[15px] leading-snug font-medium flex items-start gap-3 active:scale-[0.985]`;
+                const letter = String.fromCharCode(1488 + index);
+                btn.innerHTML = `<span class="answer-letter shrink-0 w-6 h-6 flex items-center justify-center bg-slate-700 text-cyan-400 rounded-xl text-xs font-extrabold mt-0.5">${letter}</span><span class="flex-1 pt-0.5">${optionText}</span>`;
+                btn.onclick = () => handleAnswerSelection(index, btn);
+                container.appendChild(btn);
+            });
+            document.getElementById('feedback-area').classList.add('hidden');
+            document.getElementById('prev-btn').disabled = currentIndex === 0;
+            const nextBtn = document.getElementById('next-btn');
+            const nextText = document.getElementById('next-btn-text');
+            if (currentIndex === currentQuestions.length - 1) {
+                nextText.innerText = 'סיים חידון';
+                nextBtn.classList.add('bg-emerald-600', 'hover:bg-emerald-700', 'text-white');
+                nextBtn.classList.remove('bg-white', 'text-slate-900');
+            } else {
+                nextText.innerText = 'הבא';
+                nextBtn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700', 'text-white');
+                nextBtn.classList.add('bg-white', 'text-slate-900');
+            }
+            updateProgress();
+        }
+        
+        function handleAnswerSelection(selectedIndex, selectedBtn) {
+            if (isAnswered) return;
+            isAnswered = true;
+            const q = currentQuestions[currentIndex];
+            const isCorrect = selectedIndex === q.correct;
+            const allBtns = document.getElementById('options-container').querySelectorAll('button');
+            allBtns.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === q.correct) {
+                    btn.classList.add('correct');
+                    btn.innerHTML = btn.innerHTML.replace('bg-slate-700', 'bg-emerald-600');
+                    btn.innerHTML = btn.innerHTML.replace('text-cyan-400', 'text-white');
+                } else if (idx === selectedIndex && !isCorrect) {
+                    btn.classList.add('incorrect');
+                }
+            });
+            if (isCorrect) {
+                score++;
+                document.getElementById('score-top').innerText = `${score}/${currentQuestions.length}`;
+            }
+            userAnswers[currentIndex] = selectedIndex;
+            showFeedback(isCorrect, q.options[q.correct]);
+        }
+        
+        function showFeedback(isCorrect, correctAnswerText) {
+            const feedbackArea = document.getElementById('feedback-area');
+            const feedbackBox = document.getElementById('feedback-box');
+            const feedbackText = document.getElementById('feedback-text');
+            const feedbackIcon = document.getElementById('feedback-icon');
+            feedbackArea.classList.remove('hidden');
+            if (isCorrect) {
+                feedbackBox.className = 'rounded-2xl px-5 py-3.5 text-sm border flex items-start gap-3 bg-emerald-950 border-emerald-800 text-emerald-300';
+                feedbackIcon.className = 'fa-solid fa-check-circle text-emerald-400 text-xl mt-0.5';
+                feedbackText.innerHTML = '<strong>תשובה נכונה!</strong> כל הכבוד, המשך כך!';
+            } else {
+                feedbackBox.className = 'rounded-2xl px-5 py-3.5 text-sm border flex items-start gap-3 bg-red-950 border-red-800 text-red-300';
+                feedbackIcon.className = 'fa-solid fa-times-circle text-red-400 text-xl mt-0.5';
+                feedbackText.innerHTML = `<strong>תשובה שגויה.</strong> התשובה הנכונה: <span class="font-semibold">${correctAnswerText}</span>`;
+            }
+        }
+        
+        function nextQuestion() {
+            if (!isAnswered && currentIndex < currentQuestions.length - 1) {
+                userAnswers[currentIndex] = null;
+            }
+            if (currentIndex < currentQuestions.length - 1) {
+                currentIndex++;
+                showQuestion();
+            } else {
+                endQuiz();
+            }
+        }
+        
+        function prevQuestion() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showQuestion();
+                if (userAnswers[currentIndex] !== null) {
+                    const q = currentQuestions[currentIndex];
+                    const selected = userAnswers[currentIndex];
+                    const isCorrect = selected === q.correct;
+                    setTimeout(() => {
+                        const allBtns = document.getElementById('options-container').querySelectorAll('button');
+                        allBtns.forEach((btn, idx) => {
+                            btn.disabled = true;
+                            if (idx === q.correct) btn.classList.add('correct');
+                            else if (idx === selected && !isCorrect) btn.classList.add('incorrect');
+                        });
+                        showFeedback(isCorrect, q.options[q.correct]);
+                    }, 50);
+                }
+            }
+        }
+        
+        function endQuiz() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('end-screen').classList.remove('hidden');
+            const percentage = Math.round((score / currentQuestions.length) * 100);
+            document.getElementById('final-percentage').innerText = `${percentage}%`;
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('final-total').innerText = currentQuestions.length;
+            let perfText = '';
+            let badgeClass = '';
+            if (percentage >= 90) {
+                perfText = 'ביצוע מצוין! אתה שולט בחומר באופן מלא 🏆';
+                badgeClass = 'bg-emerald-900 border-emerald-700 text-emerald-300';
+            } else if (percentage >= 75) {
+                perfText = 'ביצוע טוב מאוד! יש לך בסיס חזק מאוד.';
+                badgeClass = 'bg-teal-900 border-teal-700 text-teal-300';
+            } else if (percentage >= 60) {
+                perfText = 'ביצוע סביר. מומלץ לחזור על הנושאים החלשים.';
+                badgeClass = 'bg-amber-900 border-amber-700 text-amber-300';
+            } else {
+                perfText = 'כדאי לחזור על הסיכום ולנסות שוב. אתה יכול להצליח!';
+                badgeClass = 'bg-red-900 border-red-700 text-red-300';
+            }
+            const badge = document.getElementById('performance-badge');
+            badge.className = `inline-flex items-center gap-x-2 rounded-3xl px-5 py-2 mb-8 ${badgeClass}`;
+            document.getElementById('performance-text').innerText = perfText;
+        }
+        
+        function restartQuiz() {
+            document.getElementById('end-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+            document.getElementById('progress-bar').style.width = '0%';
+        }
+        
+        function goToStart() {
+            document.getElementById('end-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+        }
+        
+        function reviewWrongAnswers() {
+            const wrongOnes = [];
+            for (let i = 0; i < currentQuestions.length; i++) {
+                if (userAnswers[i] !== null && userAnswers[i] !== currentQuestions[i].correct) {
+                    wrongOnes.push({
+                        num: i + 1,
+                        question: currentQuestions[i].question,
+                        yourAnswer: currentQuestions[i].options[userAnswers[i]],
+                        correctAnswer: currentQuestions[i].options[currentQuestions[i].correct]
+                    });
+                }
+            }
+            if (wrongOnes.length === 0) {
+                const toast = document.createElement('div');
+                toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 bg-emerald-600 text-white px-6 py-3 rounded-2xl shadow-xl flex items-center gap-x-2 z-50';
+                toast.innerHTML = `<i class="fa-solid fa-check-double"></i> <span>כל התשובות היו נכונות! כל הכבוד!</span>`;
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 2800);
+                return;
+            }
+            let modalHTML = `
+                <div class="fixed inset-0 bg-black/80 flex items-end sm:items-center justify-center p-4 z-[100]" onclick="this.remove()">
+                    <div onclick="event.stopImmediatePropagation()" class="bg-slate-900 w-full max-w-2xl max-h-[85vh] overflow-auto rounded-t-3xl sm:rounded-3xl border border-slate-700 p-5 sm:p-6">
+                        <div class="flex items-center justify-between mb-5 sticky top-0 bg-slate-900 py-2">
+                            <div>
+                                <h3 class="text-xl font-extrabold">סקירת תשובות שגויות</h3>
+                                <p class="text-xs text-slate-400">${wrongOnes.length} שאלות שגויות מתוך ${currentQuestions.length}</p>
+                            </div>
+                            <button onclick="this.closest('.fixed').remove()" class="text-3xl leading-none text-slate-400 hover:text-white px-3">×</button>
+                        </div>
+                        <div class="space-y-4 pb-4">
+            `;
+            wrongOnes.forEach(item => {
+                modalHTML += `
+                    <div class="border border-red-900/60 bg-red-950/30 rounded-2xl p-4 text-sm">
+                        <div class="flex items-center gap-x-2 mb-2">
+                            <span class="font-mono text-xs bg-red-900/60 text-red-300 px-2.5 py-px rounded">שאלה ${item.num}</span>
+                        </div>
+                        <div class="font-medium mb-3 leading-snug">${item.question}</div>
+                        <div class="space-y-1.5 text-xs">
+                            <div class="flex gap-2">
+                                <span class="text-red-400 shrink-0">✗ התשובה שלך:</span> 
+                                <span class="text-red-200">${item.yourAnswer}</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <span class="text-emerald-400 shrink-0">✓ התשובה הנכונה:</span> 
+                                <span class="text-emerald-200 font-medium">${item.correctAnswer}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            modalHTML += `
+                        </div>
+                        <div class="pt-3 border-t border-slate-700 flex justify-end">
+                            <button onclick="this.closest('.fixed').remove()" class="px-6 py-2 text-sm font-semibold bg-slate-700 hover:bg-slate-600 rounded-2xl">סגור</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
+        
+        function setupKeyboardSupport() {
+            document.addEventListener('keydown', function(e) {
+                const quizScreen = document.getElementById('quiz-screen');
+                if (quizScreen.classList.contains('hidden')) return;
+                if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    if (e.key === 'ArrowRight') document.getElementById('next-btn').click();
+                    else document.getElementById('prev-btn').click();
+                }
+                if (!isAnswered && ['1','2','3','4'].includes(e.key)) {
+                    const idx = parseInt(e.key) - 1;
+                    const options = document.getElementById('options-container').querySelectorAll('button');
+                    if (options[idx]) options[idx].click();
+                }
+            });
+            console.log('%c[Cyber Quiz] Keyboard support enabled (arrows + 1-4 keys)', 'color:#475569');
+        }
+        
+        function initializeQuiz() {
+            initTailwind();
+            setupKeyboardSupport();
+            document.getElementById('progress-bar').style.width = '0%';
+            console.log('%c[Cyber Quiz] חידון מוכן! כל האפשרויות מאוזנות באורך.', 'color:#64748b; font-size: 9px');
+        }
+        
+        window.onload = initializeQuiz;
+    </script>
+</body>
+</html>
